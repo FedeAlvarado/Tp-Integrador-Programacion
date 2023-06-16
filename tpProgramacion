@@ -1,0 +1,59 @@
+Algoritmo tpProgramacion
+	Definir destinos Como Caracter
+	Definir cantDestinos,optMenu como entero
+	cantDestinos<-3
+	Dimension destinos[cantDestinos]
+	cargarDestinos(destinos)
+	Repetir
+	menu()
+	Leer optMenu
+	Segun optMenu Hacer
+		1:
+			
+			Escribir "Destinos disponibles: " 
+			mostrarDestinos(destinos,cantDestinos)
+			
+		2:
+			Escribir "Buscar Vuelos Disponibles: "
+			//preguntar ORIGEN, en base a la rta recorrer array 
+		3:
+			
+		4:
+			
+		5:	Escribir "Finalizo Programa"
+	Fin Segun
+	Hasta Que optMenu == 5
+	
+	
+FinAlgoritmo
+
+SubProceso menu()
+	Escribir "-->BIENVENIDO A FIVEPOINT AEROLINEAS<--"
+	Escribir "1- Consultar destinos disponibles"
+	Escribir "2- Buscar vuelos disponibles"
+	Escribir "3- Reservar un pasaje"
+	Escribir "4- Revisar estado de la reserva"
+	Escribir "5-SALIR"
+	
+FinSubProceso
+
+SubProceso mostrarDestinos(array,n)
+	Definir i Como Entero
+	Para i<-0 Hasta n-1 Hacer
+	Escribir array[i]	
+	FinPara
+	
+FinSubProceso
+
+SubProceso cargarDestinos(array)
+	array[0]<- "Rosario"
+	array[1]<- "Mendoza"
+	array[2]<- "Bs As"
+FinSubProceso
+
+
+
+	
+
+
+	

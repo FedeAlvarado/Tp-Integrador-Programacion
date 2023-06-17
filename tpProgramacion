@@ -1,27 +1,54 @@
 Algoritmo tpProgramacion
-	Definir destinos Como Caracter
-	Definir cantDestinos,optMenu como entero
+	Definir ciudades, origen,horarios,origenMay,destino Como Caracter
+	Definir cantDestinos,optMenu,cantVuelos como entero
 	cantDestinos<-3
-	Dimension destinos[cantDestinos]
-	cargarDestinos(destinos)
+	cantVuelos<-3
+	Dimension ciudades[cantDestinos],horarios[cantVuelos]
+	cargarDestinos(ciudades)
+	horariosVuelos(horarios)
 	Repetir
-	menu()
-	Leer optMenu
-	Segun optMenu Hacer
-		1:
-			
-			Escribir "Destinos disponibles: " 
-			mostrarDestinos(destinos,cantDestinos)
-			
-		2:
-			Escribir "Buscar Vuelos Disponibles: "
-			//preguntar ORIGEN, en base a la rta recorrer array 
-		3:
-			
-		4:
-			
-		5:	Escribir "Finalizo Programa"
-	Fin Segun
+		menu()
+		Leer optMenu
+		Segun optMenu Hacer
+			1:
+				
+				Escribir "Destinos disponibles: " 
+				mostrarArray(ciudades,cantDestinos)
+				
+			2:
+				Escribir "Buscar Vuelos Disponibles: "
+				mostrarArray(ciudades,cantDestinos)
+				Escribir "Ingrese su lugar de origen, para ver los vuelos disponibles"
+				Leer origen
+				origen=Mayusculas(origen)
+				
+				Para i<-0 Hasta cantDestinos-1 Hacer
+					ciudades[i]=Mayusculas(ciudades[i])
+						si origen == ciudades[i]
+							Escribir "Ingrese destino: "
+							Leer destino
+								si destino == ciudades[i] Entonces
+									Escribir "Vuelos disponibles:"
+									mostrarArray(horarios,cantVuelos)
+								FinSi
+						FinSi
+				FinPara
+				
+				//filtrar rosario y que aparezcan solo los destinos.
+				//buenos aires
+				//cordoba 
+				//rosa - cord 4 ---- 13 15 20 00
+				//usuarios registrados
+				//fila 					col
+				//rosario					13hs - 15hs
+				//cordoba 				11hs - 20hs
+				//preguntar ORIGEN, en base a la rta recorrer array 
+			3:
+				
+			4:
+				
+			5:	Escribir "Finalizo Programa"
+		Fin Segun
 	Hasta Que optMenu == 5
 	
 	
@@ -37,10 +64,10 @@ SubProceso menu()
 	
 FinSubProceso
 
-SubProceso mostrarDestinos(array,n)
+SubProceso mostrarArray(array,n)
 	Definir i Como Entero
 	Para i<-0 Hasta n-1 Hacer
-	Escribir array[i]	
+		Escribir array[i]	
 	FinPara
 	
 FinSubProceso
@@ -50,10 +77,9 @@ SubProceso cargarDestinos(array)
 	array[1]<- "Mendoza"
 	array[2]<- "Bs As"
 FinSubProceso
+SubProceso horariosVuelos(array)
+	array[0]<- "Vuelo 1 --->10:00AM"
+	array[1]<- "Vuelo 2 --->18:00PM"
+	array[2]<- "Vuelo 3 --->01:00AM"
+FinSubProceso
 
-
-
-	
-
-
-	

@@ -21,17 +21,21 @@ Algoritmo tpProgramacion
 				Escribir "Ingrese su lugar de origen, para ver los vuelos disponibles"
 				Leer origen
 				origen=Mayusculas(origen)
-				
-				Para i<-0 Hasta cantDestinos-1 Hacer
-					ciudades[i]=Mayusculas(ciudades[i])
-						si origen == ciudades[i]
-							Escribir "Ingrese destino: "
-							Leer destino
-								si destino == ciudades[i] Entonces
-									Escribir "Vuelos disponibles:"
-									mostrarArray(horarios,cantVuelos)
-								FinSi
+
+				Para i<-0 Hasta cantDestinos-1 Hacer //ARREGLAR ESTOS FOR Y HACERLOS CON WHILE
+					si origen == ciudades[i]
+						ciudades[i]=Mayusculas(ciudades[i])
+						Escribir "Ingrese destino: "
+						Leer destino
+						destino=Mayusculas(destino)
+					FinSi
+					Para i<-0 Hasta cantDestinos-1 Hacer
+						si destino == ciudades[i] Entonces
+					Limpiar Pantalla
+							Escribir "Vuelos disponibles:"
+							mostrarArray(horarios,cantVuelos)
 						FinSi
+					FinPara
 				FinPara
 				
 				//filtrar rosario y que aparezcan solo los destinos.
@@ -73,9 +77,9 @@ SubProceso mostrarArray(array,n)
 FinSubProceso
 
 SubProceso cargarDestinos(array)
-	array[0]<- "Rosario"
-	array[1]<- "Mendoza"
-	array[2]<- "Bs As"
+	array[0]<- "ROSARIO"
+	array[1]<- "MENDOZA"
+	array[2]<- "BUENOS AIRES"
 FinSubProceso
 SubProceso horariosVuelos(array)
 	array[0]<- "Vuelo 1 --->10:00AM"

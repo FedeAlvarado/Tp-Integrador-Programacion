@@ -1,6 +1,8 @@
 Algoritmo tpProgramacion
 	Definir ciudades, origen,horarios,origenMay,destino Como Caracter
-	Definir cantDestinos,optMenu,cantVuelos como entero
+	Definir cantDestinos,optMenu,cantVuelos, nroVuelo como entero
+	Definir destinosValidos Como Logico
+	destinosValidos<-Falso
 	cantDestinos<-3
 	cantVuelos<-3
 	Dimension ciudades[cantDestinos],horarios[cantVuelos]
@@ -16,37 +18,39 @@ Algoritmo tpProgramacion
 				mostrarArray(ciudades,cantDestinos)
 				
 			2:
-				Escribir "Buscar Vuelos Disponibles: "
+				Escribir "|----------------------------------------|"
+				Escribir "|      Buscar Vuelos Disponibles:        |"       
+				Escribir "|----------------------------------------|"
 				mostrarArray(ciudades,cantDestinos)
-				Escribir "Ingrese su lugar de origen, para ver los vuelos disponibles"
-				Leer origen
-				origen=Mayusculas(origen)
-
-				Para i<-0 Hasta cantDestinos-1 Hacer //ARREGLAR ESTOS FOR Y HACERLOS CON WHILE
-					si origen == ciudades[i]
-						ciudades[i]=Mayusculas(ciudades[i])
-						Escribir "Ingrese destino: "
-						Leer destino
-						destino=Mayusculas(destino)
-					FinSi
-					Para i<-0 Hasta cantDestinos-1 Hacer
-						si destino == ciudades[i] Entonces
-					Limpiar Pantalla
-							Escribir "Vuelos disponibles:"
-							mostrarArray(horarios,cantVuelos)
-						FinSi
-					FinPara
-				FinPara
 				
-				//filtrar rosario y que aparezcan solo los destinos.
-				//buenos aires
-				//cordoba 
-				//rosa - cord 4 ---- 13 15 20 00
-				//usuarios registrados
-				//fila 					col
-				//rosario					13hs - 15hs
-				//cordoba 				11hs - 20hs
-				//preguntar ORIGEN, en base a la rta recorrer array 
+
+				Repetir
+					Escribir "Ingrese su lugar de origen, para ver los vuelos disponibles"
+					Leer origen
+					origen=Mayusculas(origen)
+					
+					i<-0;
+					destinosValidos <- Falso;
+					Mientras i <= cantDestinos-1 y no destinosValidos
+						si ciudades[i] == origen Entonces
+							Escribir "Ingrese el destino, su punto de partida es: ",origen
+								Leer destino
+								destino=Mayusculas(destino)
+							i<-0;
+							Mientras i <= cantDestinos-1 y no destinosValidos
+								si ciudades[i] == destino Entonces
+									Escribir "Vuelos disponibles para ir de -*",origen, "*- hasta -*",destino,"*- son:"
+									mostrarArray(horarios,cantVuelos)
+									destinosValidos<-Verdadero
+								FinSi
+								i <- i +1; 
+							FinMientras
+						FinSi
+						i <- i +1;
+					FinMientras
+				Hasta Que destinosValidos==Verdadero
+				
+				Escribir "Para reservar un vuelo primero registrarse como cliente"  
 			3:
 				
 			4:
@@ -59,13 +63,14 @@ Algoritmo tpProgramacion
 FinAlgoritmo
 
 SubProceso menu()
-	Escribir "-->BIENVENIDO A FIVEPOINT AEROLINEAS<--"
-	Escribir "1- Consultar destinos disponibles"
-	Escribir "2- Buscar vuelos disponibles"
-	Escribir "3- Reservar un pasaje"
-	Escribir "4- Revisar estado de la reserva"
-	Escribir "5-SALIR"
-	
+	Escribir "|----------------------------------------|"
+	Escribir "|  >BIENVENIDO A FIVEPOINT AEROLINEAS<   |"
+	Escribir "|    1- Consultar destinos disponibles   |"
+	Escribir "|    2- Buscar vuelos disponibles        |"
+	Escribir "|    3- Reservar un pasaje               |"
+	Escribir "|    4- Revisar estado de la reserva     |"
+	Escribir "|    5-SALIR                             |"
+	Escribir "|----------------------------------------|"
 FinSubProceso
 
 SubProceso mostrarArray(array,n)
@@ -77,9 +82,9 @@ SubProceso mostrarArray(array,n)
 FinSubProceso
 
 SubProceso cargarDestinos(array)
-	array[0]<- "ROSARIO"
-	array[1]<- "MENDOZA"
-	array[2]<- "BUENOS AIRES"
+	array[0]<- "---->  ROSARIO"
+	array[1]<- "---->  MENDOZA"
+	array[2]<- "---->  BUENOS AIRES"
 FinSubProceso
 SubProceso horariosVuelos(array)
 	array[0]<- "Vuelo 1 --->10:00AM"

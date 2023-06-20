@@ -16,13 +16,15 @@ Algoritmo tpProgramacion
 				
 				Escribir "Destinos disponibles: " 
 				mostrarArray(ciudades,cantDestinos)
+				//ACA PODEMOS PREGUNTAR SI DESEA RESERVAR UN VUELO Y USAMOS LA FUNCION DE REGISTAR USUARIO PARA QUE SE REGISTRE 
+			
 				
 			2:
 				Escribir "|----------------------------------------|"
 				Escribir "|      Buscar Vuelos Disponibles:        |"       
 				Escribir "|----------------------------------------|"
 				mostrarArray(ciudades,cantDestinos)
-				
+				//EN QUE MOMENTO DEJAMOS QUE RESERVE SU VUELO???
 
 				Repetir
 					Escribir "Ingrese su lugar de origen, para ver los vuelos disponibles"
@@ -50,11 +52,15 @@ Algoritmo tpProgramacion
 					FinMientras
 				Hasta Que destinosValidos==Verdadero
 				
-				Escribir "Para reservar un vuelo primero registrarse como cliente"  
+				Escribir "Para reservar un vuelo primero registrarse como cliente"
+				Escribir "Desea reservar un vuelo?    ----SI/NO----"
+				//ACA TMB LO DEJAMOS REGISTRARSE???
+
 			3:
 				
 			4:
-				
+			Escribir "Revisar estado de la reserva"
+
 			5:	Escribir "Finalizo Programa"
 		Fin Segun
 	Hasta Que optMenu == 5

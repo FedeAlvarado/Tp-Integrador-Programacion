@@ -1,0 +1,20 @@
+Algoritmo estadoReserva
+Definir dniValido como Logico
+dniValido<-Falso
+
+    Escribir"Ingrese su nro DNI para ver el 'Estado de su reserva' "
+    Leer dniABuscar
+    i<-0;
+	Mientras i <= cantidadUsuarios-1 y no dniValido
+		si dniCliente[i] == dniABuscar Entonces
+		    Escribir "La reserva con el DNI ",dniABuscar":"
+            //detallar todos los datos de la reserva, almacenado en el array clientes.
+		    dniValido<-Verdadero
+	    FinSi
+    i <- i +1; 
+	FinMientras
+
+//podriamos desarrollar si el cliente desea anular su reserva.
+
+FinAlgoritmo
+

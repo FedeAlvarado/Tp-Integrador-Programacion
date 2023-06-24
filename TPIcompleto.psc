@@ -1,6 +1,6 @@
 Algoritmo ReservaVuelos
     definir usuarios, provincias, reservasCompra, horariosVuelo, arrayEquipajesGuardados, opcionesEquipaje como cadena
-    definir origen, destino, horario, codigosDeReserva,opcionValija, opcionCantidad, codigoReservaAsignado, usuarioOnline como entero
+    definir origen, destino, horario, codigosDeReserva,opcionValija, opcionCantidad, codigoReservaAsignado como entero
     definir retorno, registro, login Como Logico
 	definir costoTotal, tarifaBase, costoPasaje, costoFinalEquipaje como real
 	
@@ -9,7 +9,8 @@ Algoritmo ReservaVuelos
 	dimension opcionesEquipaje[4,3] // muestra las opciones de equipaje --CONVERTIR EN SUBPROCESO?
 	dimension arrayEquipajesGuardados[100,3] //almacenamiento del equipaje cargado por los usuarios
 	dimension provincias[24,2] //array orígenes/destinos + zona tarifaria
-	usuarioOnline<-0
+	
+	
 	codigoReservaAsignado<-0
 	codigosDeReserva<- 1000
     cantidadUsuarios <- 0
@@ -23,7 +24,7 @@ Algoritmo ReservaVuelos
     opcionesEquipaje[0,1] <- "Hasta 5 kg"
     opcionesEquipaje[0,2] <- "0" 
     
-    opcionesEquipaje[1,0] <- "Valija"
+    opcionesEquipaje[1,0] <- "Valija chica"
     opcionesEquipaje[1,1] <- "Hasta 10 kg"
     opcionesEquipaje[1,2] <- "1000"  
     
@@ -97,7 +98,7 @@ Algoritmo ReservaVuelos
 			
 			1:   registrarUsuario(usuarios, cantidadUsuarios)
 				
-			2:	login<-validarLogin(usuarios, usuarioOnline)
+			2:	login<-validarLogin(usuarios)
 				si login==Verdadero
 					mostrar "----------------------------------------------------------------------------------------------"
 					mostrar "se ha loggeado correctamente!!! ya puede realizar una reserva o consultar su reserva previa!!!"
@@ -114,6 +115,7 @@ Algoritmo ReservaVuelos
 				si login==verdadero
 					reservas(cantidadReservas, provincias, horariosVuelo, reservasCompra, codigosDeReserva, costoPasaje, tarifaBase)
 					cargaDeEquipaje<-costoEquipaje(opcionesEquipaje, iva, arrayEquipajesGuardados, costoFinalEquipaje)
+					mostrarCostoFinal(costoPasaje, costoFinalEquipaje, iva)
 				SiNo
 					mostrar "---------------------------------------------------------------------------"
 					mostrar "debe registrase y loggearse correctamente para acceder a reservar un pasaje"
@@ -203,7 +205,7 @@ SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Refer
 	
 FinSubProceso
 
-Funcion return<- validarLogin(usuarios, usuarioOnline Por Referencia)
+Funcion return<- validarLogin(usuarios)
 	Definir i Como Entero
 	definir dni, password como cadena
 	definir dniEncontrado Como Logico
@@ -219,11 +221,12 @@ Funcion return<- validarLogin(usuarios, usuarioOnline Por Referencia)
 		si usuarios[i,2] == dni y usuarios[i,4]==password Entonces
 			dniEncontrado <- Verdadero //fuerzo la salida del bucle
 			mostrar "se ha loggeado correctamente!"
+			
 		FinSi
 		i <- i +1; 
 	FinMientras
 	return	<- Verdadero
-	usuarioOnline<- ConvertirANumero(dni)
+	
 FinFuncion
 
 subproceso reservas(cantidadReservas por referencia, provincias, horariosVuelo, reservasCompra Por Referencia, codigosDeReserva Por Referencia, costopasaje Por Referencia, tarifaBase por referencia)
@@ -305,7 +308,7 @@ funcion return<-costoEquipaje(opcionesEquipaje, iva Por Referencia, arrayEquipaj
     mostrar "---------------------"
     mostrar "Tipo               Peso                Costo"
     mostrar opcionesEquipaje[0,0], "  " opcionesEquipaje[0,1], "      " opcionesEquipaje[0,2] "	"
-    mostrar opcionesEquipaje[1,0], "            " opcionesEquipaje[1,1], "     " opcionesEquipaje[1,2] "	 "
+    mostrar opcionesEquipaje[1,0], "    " opcionesEquipaje[1,1], "     " opcionesEquipaje[1,2] "	 "
     mostrar opcionesEquipaje[2,0], "    " opcionesEquipaje[2,1], "     " opcionesEquipaje[2,2] "	"
 	mostrar opcionesEquipaje[3,0], "     " opcionesEquipaje[3,1], "     " opcionesEquipaje[3,2] "	"
 	mostrar "---------------------"
@@ -349,16 +352,19 @@ funcion return<-costoEquipaje(opcionesEquipaje, iva Por Referencia, arrayEquipaj
     return<- costoFinalEquipaje
 FinFuncion
 
-SubProceso mostrarCostoFinal()
+SubProceso mostrarCostoFinal(costoPasaje Por Referencia, costoFinalEquipaje por referencia, iva por referencia)
 	
+
 	mostrar "-------------------------------------------------------"
 	mostrar "     ******** TICKET FINAL DE SU COMPRA *********"
 	mostrar "-------------------------------------------------------"
-	mostrar "Pasaje: "
-	mostrar "Equipaje: "
-	mostrar "Impuestos (iva): "
-	mostrar "FINAL: $ " 
 	
+		mostrar "Pasaje: " costoPasaje
+		mostrar "Equipaje: " costoFinalEquipaje
+		mostrar "Sub-total: " costoPasaje + costoFinalEquipaje
+		mostrar "FINAL con IVA: $ " (costoPasaje + costoFinalEquipaje) * iva
+		
+		
 FinSubProceso
 
 SubProceso mostrarArray(reservasCompra,n,m)
@@ -375,3 +381,26 @@ funcion return<- costoFinal()
 	definir costoTotal como real
 	
 FinFuncion
+
+
+//RETORNO EL INDICE DEL ELEMENTO ENCONTRADO, EN CASO CONTRARIO (elemento no encontrado) RETORNO -1
+//Funcion return<- buscarElemento(usuarios,n,columnaAbuscar,usuarioOnline por referencia)
+//	Definir i Como Entero;
+//	i<-0;
+//	elementoEncontrado <- Falso;
+//	Mientras i <= n-1 y no elementoEncontrado
+//		si usuarios[i,2] == usuarioOnline Entonces
+//			elementoEncontrado <- Verdadero;
+//		SiNo
+//			i <- i +1; 
+//		FinSi
+//	FinMientras
+//	Si elementoEncontrado Entonces
+//		return <- i;
+//	SiNo
+//		return <- -1;
+//	FinSi
+//FinFuncion
+
+
+//MUESTRA UN ARRAY BIDIMENCIONAL

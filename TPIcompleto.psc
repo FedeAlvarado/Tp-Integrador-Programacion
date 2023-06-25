@@ -1,16 +1,16 @@
 Algoritmo ReservaVuelos
     definir usuarios, provincias, reservasCompra, horariosVuelo, arrayEquipajesGuardados, opcionesEquipaje, elementoABuscar como cadena
-    definir origen, destino, horario, codigosDeReserva,opcionValija, opcionCantidad, codigoReservaAsignado, encontrarIndiceDeReserva, indiceEquipajes como entero
+    definir origen, destino, horario, codigosDeReserva,opcionValija, opcionCantidad, codigoReservaAsignado, encontrarIndiceDeReserva, indiceEquipajes, numeroDeUsuario como entero
     definir retorno, registro, login Como Logico
 	definir costoTotal, tarifaBase, costoPasaje, costoFinalEquipaje como real
 	
-	dimension usuarios[100, 5] // Almacenamiento de los datos de registro de los usuarios
+	dimension usuarios[100, 6] // Almacenamiento de los datos de registro de los usuarios
     dimension reservasCompra[100,5] // Almacenamiento info sobre compra de pasaje
-	dimension opcionesEquipaje[4,3] // muestra las opciones de equipaje --CONVERTIR EN SUBPROCESO?
+	dimension opcionesEquipaje[4,3] // muestra las opciones de equipaje 
 	dimension arrayEquipajesGuardados[100,3] //almacenamiento del equipaje cargado por los usuarios
 	dimension provincias[24,2] //array orígenes/destinos + zona tarifaria
 	
-	
+	numeroDeUsuario<-0
 	codigoReservaAsignado<-0
 	indiceEquipajes<-0
 	codigosDeReserva<- 1000
@@ -94,19 +94,27 @@ Algoritmo ReservaVuelos
     horariosVuelo[2] <- "salida 16:00 / llegada 19:00"
 	
 	
-	Mostrar "---------------------------------"
-    Mostrar "|      *** BIENVENIDO!!! ***     |"
-    Mostrar "|                                |"
-    Mostrar "|   Ingrese una opción para      |"
-    Mostrar "|          comenzar...           |"
-    Mostrar "---------------------------------"
+	mostrar "-------------------------------"
+	mostrar "|    *** BIENVENIDO!!! ***     |"
+	mostrar "-------------------------------"
+	mostrar "|  Se recomienda agrandar esta |"
+	mostrar "| ventana para visualizar el   |"
+	mostrar "|   programa correctamente     |"
+	mostrar "-------------------------------"
+	mostrar "|   Ingrese una opción para    |"
+	mostrar "|         comenzar...          |"
+	mostrar "-------------------------------"
+
+
+
+
 
     
     Repetir
 		opcionMenu <- menu()
 		Segun opcionMenu
 			
-			1:   registrarUsuario(usuarios, cantidadUsuarios)
+			1:   registrarUsuario(usuarios, cantidadUsuarios,numeroDeUsuario)
 				
 			2:	login<-validarLogin(usuarios)
 				si login==Verdadero
@@ -148,9 +156,19 @@ Algoritmo ReservaVuelos
 				mostrarArrayEnIndiceEspecifico(encontrarIndiceDeReserva,reservasCompra,cantidadReservas,5)
 				mostrar "Tipo de equipaje    -  cantidad   -   Costo Equipaje"
 				mostrarArrayEnIndiceEspecifico(encontrarIndiceDeReserva,arrayEquipajesGuardados,indiceEquipajes,3)
+				
+				
+			5:
+				adminUser(usuarios, cantidadUsuarios,6)
+				// ////////////////////////////////////////////////////////////////
+				
+				// ordenamientos y busquedas para el admin user
+				
+				// ////////////////////////////////////////////////////////
+			6:  Limpiar Pantalla
 				mostrar "--------------------------------------------------"
 				mostrar " *** Gracias por visitar nuestro programa!!! ***"
-				mostrar "--------------------------------------------------"
+				mostrar "--------------------------------------------------"	
 		FinSegun
 	Mientras Que opcionMenu<>6
 	
@@ -163,8 +181,8 @@ Funcion return<- menu() //funcion para validar las opciones del menu
 		Escribir "1- Registrarse como usuario" //
 		Escribir "2- loggin "
 		Escribir "3- Consultar Destinos y realizar compra"//En esta versión los orígenes/destinos se muestran como un listado con cada provincia con un nro asignado y no hay búsqueda, se muestra tmb l zona traifaria que vamos a usar para calcular el costo del pasaje
-		Escribir "4- Ver estado de reserva" //el usuario puede buscar su reserva por dni (única búsqueda que va a hacer el usuario)
-		Escribir "5- usuario Admin" // este usuario va a tener un loggin y pass hardcodeado, respresenta a un empleado de la empresa que va a poder realizar distintas búsquedas
+		Escribir "4- Ver estado de reserva" //el usuario puede buscar su reserva por nro de reserva.
+		Escribir "5- usuario Admin" // este usuario va a tener un loggin y pass hardcodeado, respresenta a un empleado de la empresa que va a poder realizar distintas búsquedas/ordenamientos
 		Escribir "6- salir"
 		
 		
@@ -173,7 +191,7 @@ Funcion return<- menu() //funcion para validar las opciones del menu
 	return<-opcionM
 FinFuncion
 
-SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Referencia)
+SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Referencia,numeroDeUsuario Por Referencia)
     definir nombre, apellido, edad, dni, password1, password2 como cadena
     
     Mostrar "Ingresar nombre:"
@@ -188,10 +206,10 @@ SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Refer
     
 	Repetir
 		Mostrar "Ingrese edad:" 
-		leer edad //falta validad edad
+		leer edad 
 		validacion<-ConvertirANumero(edad)	
 		
-	Mientras Que validacion<=0
+	Mientras Que validacion<=17 //validación usuario mayor de edad
 	
 	
 	
@@ -206,12 +224,14 @@ SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Refer
 		
 	Mientras Que password1<>password2
 	
+	numeroDeUsuario<-numeroDeUsuario + 1
+	
     usuarios[cantidadUsuarios, 0] <- nombre 
     usuarios[cantidadUsuarios, 1] <- apellido
     usuarios[cantidadUsuarios, 2] <- dni
     usuarios[cantidadUsuarios, 3] <- edad
 	usuarios[cantidadUsuarios, 4] <- password2
-	
+	usuarios[cantidadUsuarios, 5] <- convertirATexto(numeroDeUsuario)//se agregó un nro de usuario para despue´s hacer ordenamiento alfabético y con el nro de usuario dejar el array en su oprden original
 	
     
     cantidadUsuarios <- cantidadUsuarios + 1 //la var iable cantidadUsuarios que se aumenta en +1 por cada usuario que se registra, permite ir almacenando los datos de cada usuario en una fila distinta del array
@@ -219,7 +239,7 @@ SubProceso  registrarUsuario(usuarios Por Referencia, cantidadUsuarios Por Refer
 	// bucle temporal para comprobar si se están guardando los datos en el array correctamente
 
 		Para i<-0 Hasta cantidadUsuarios-1 Hacer 
-			Para j<-0 Hasta 4 Hacer
+			Para j<-0 Hasta 5 Hacer
 				Escribir Sin Saltar usuarios[i,j] "   "
 			Fin Para
 			Escribir ""
@@ -272,19 +292,24 @@ subproceso reservas(cantidadReservas por referencia, provincias, horariosVuelo, 
 		
 	FinPara
 	
+	Repetir
+		leer origen 
+	Mientras Que origen<1 o origen>24
 	
-	leer origen // validar
 	
     mostrar "------------------------------"
     mostrar "    Seleccione el destino:"
 	mostrar "------------------------------"// el listado de provincias sigue en pantalla
 	
 	Repetir
-		leer destino 
+		Repetir
+			leer destino 
+		Mientras Que destino<1 o destino>24
 		si destino == origen entonces
 			mostrar "-----------------------------------------------------"
 			mostrar "Error, debe seleccionar un destino distinto al origen"
 			mostrar "Origen: " origen
+			mostrar "Vuelva a seleccionar un destino:"
 			mostrar "-----------------------------------------------------"
 		FinSi
 	Mientras Que destino==origen //validación para que no permita elegir mismo origen/destinos
@@ -296,7 +321,9 @@ subproceso reservas(cantidadReservas por referencia, provincias, horariosVuelo, 
 		mostrar  i+1,"     ", horariosVuelo[i] 
 	FinPara
 	
-	leer horario //validar
+	Repetir
+		leer horario 
+	Mientras Que horario<1 o horario>24
 	
 	costoPasaje<- ConvertirANumero(provincias[origen-1,1])*tarifaBase + (convertirANumero(provincias[destino-1,1]) * tarifaBase)
 	
@@ -309,7 +336,7 @@ subproceso reservas(cantidadReservas por referencia, provincias, horariosVuelo, 
 	mostrar "   su código de reserva es: "
 	mostrar "--------------------------------"
 	
-	codigoReservaAsignado<-  codigosDeReserva +1 //	no funciona!!!!!!!!!!!
+	codigoReservaAsignado<-  codigosDeReserva +1 
 	mostrar codigoReservaAsignado
 	
 	reservasCompra[cantidadReservas,0]<- (provincias[origen-1,0]) 
@@ -363,12 +390,9 @@ funcion return<-costoEquipaje(opcionesEquipaje, iva Por Referencia, arrayEquipaj
 		
 	Mientras Que opcionValija < 1 o opcionValija > 4
 	
-	costoCadena<- opcionesEquipaje[opcionValija -1,2] // hice un solo array de cadena, en esta linea se busca la cadena en el array...
-	costoAnumero<- ConvertirANumero(costoCadena) // y acá se convierte a número para poder calcular el costo
-	// //////////////////////////////////////////////////////////////////
-	//elimniar costoAnumero, se debe convertir directamente en la formula de abajo:
-	// ////////////////////////////////////////////////////////////
-	costoFinalEquipaje <- cantidadValija * costoAnumero 
+	costoCadena<- opcionesEquipaje[opcionValija -1,2] 
+	
+	costoFinalEquipaje <- cantidadValija * ConvertirANumero(costoCadena )
 	
 	mostrar "-------------------------------------------------------"
 	mostrar "resumen de su carga de equipaje"
@@ -448,4 +472,102 @@ SubProceso mostrarArrayEnIndiceEspecifico(encontrarIndiceDeReserva Por Referenci
 	Fin Para
 FinSubProceso
 
+subproceso adminUser(usuarios, cantidadUsuarios Por Referencia,6)
+	definir opcionMenu Como Entero
+	definir user, pass como cadena
+	
+	
+	//-----------------------------//
+	// user: admin                //
+	//                            //
+	//password: admin             //
+	//----------------------------//
+	
+	Repetir
+		mostrar "Ingrese su nombre de usuario"
+		leer user
+		mostrar "Ingrese su password"
+		leer pass
+	Mientras Que user<> "admin" y pass<> "admin"
+	
+	
+	mostrar "ingrese una opción"
+	mostrar "1 - Ver usuarios registrados en el sistema"
+	// buscar un usuario
+	mostrar "2 - Visualizar usuarios Orden Alfabético(Apellido)"
+	mostrar "2 - Visualizar Ventas"
+	mostrar "2 - Ventas ordenadas por monto"
+	mostrar "2 - Buscar Ventas según Origen/destino"
+	mostrar "6 - salir"
+	Repetir
+		leer opcionMenu
+	Mientras Que opcionMenu<1 o opcionMenu>6
+	
+	Repetir
+		Segun opcionMenu Hacer
+			1:
+				mostrarArray(usuarios,cantidadUsuarios,6)
+				
+			2:
+				
+				ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
+				mostrarArray(usuarios,cantidadUsuarios,6)
+				ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
+			3:
+				
+				//mostrar mostrarArray(array,n,m)
+				
+				
+		Fin Segun	
+	Mientras Que opcionMenu<>6
 
+	
+FinSubProceso
+
+
+SubProceso mostrarUsuarios(usuarios,n,m) // ya hay un subproceso de mostrar array!!!!!
+	definir i,j como entero
+	Para i<-0 Hasta n-1 Hacer
+		Para j<-0 Hasta m-1 Hacer
+			Escribir Sin Saltar usuarios[i,j] "   "
+		Fin Para
+		Escribir ""
+	Fin Para
+FinSubProceso
+
+
+SubProceso ordernarUsuariosDESC(array,n,m,columnaAOrdenar) // para ordenar usuarios Alfabéticamente
+	Definir aux Como cadena
+	para i<-0 hasta n-2 Hacer 
+		para k<-i+1 hasta n-1 Hacer 
+			si array[i,1]>array[k,1] Entonces
+				Para j<-0 Hasta m-1 Hacer
+					aux <- array[i,j]
+					array[i,j] <- array[k,j]
+					array[k,j] <- aux
+				Fin Para
+			FinSi
+		FinPara
+	FinPara
+FinSubProceso
+
+
+SubProceso ordernarArregloASC(array,n,m,columnaAOrdenar) // para ordenar usuarios por nro de usuario (dps de ordenar alfabéticamente)
+	Definir aux Como Texto
+	para i<-0 hasta n-2 Hacer 
+		para k<-i+1 hasta n-1 Hacer 
+			si array[i,columnaAOrdenar]>array[k,columnaAOrdenar] Entonces
+				Para j<-0 Hasta m-1 Hacer
+					aux <- array[i,j]
+					array[i,j] <- array[k,j]
+					array[k,j] <- aux
+				Fin Para
+			FinSi
+		FinPara
+	FinPara
+FinSubProceso
+
+//funcion()
+//	Impedir a un usuario registrarse 2 veces
+//FinFuncion
+	

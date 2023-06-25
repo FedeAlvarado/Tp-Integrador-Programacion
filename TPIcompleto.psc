@@ -24,7 +24,7 @@ Algoritmo ReservaVuelos
     opcionesEquipaje[0,0] <- "Equipaje de mano"
     opcionesEquipaje[0,1] <- "Hasta 5 kg"
     opcionesEquipaje[0,2] <- "0" 
-    
+
     opcionesEquipaje[1,0] <- "Valija chica"
     opcionesEquipaje[1,1] <- "Hasta 10 kg"
     opcionesEquipaje[1,2] <- "1000"  
@@ -37,11 +37,11 @@ Algoritmo ReservaVuelos
     opcionesEquipaje[3,1] <- "Hasta 20 kg"
     opcionesEquipaje[3,2] <- "3000" 
 	
-	provincias[0, 0] <- "Buenos Aires"
-    provincias[0, 1] <- "1"
-    provincias[1, 0] <- "Córdoba"
-    provincias[1, 1] <- "1"
-    provincias[2, 0] <- "Santa Fe"
+	provincias[0, 0] <- "Buenos Aires" //Se dividieron las provincias en 6 zonas geograficas, y luego se usa esto como criterio para calcular el costo del pasaje
+    provincias[0, 1] <- "1"			 // multiplicando el número de zona de origen por una tarifa base y sumando  esto a destino*tarifaBase
+    provincias[1, 0] <- "Córdoba"	// la zona 1 es la zona centro del país, zona 2 litoral, zona 3 cuyo, zona 4/5 norte, zona 6 patagonia
+    provincias[1, 1] <- "1"			//con esta lógica los vuelos son siempre más baratos entre provincias de la misma zona y a la vez aumentan de precio al alejarse
+    provincias[2, 0] <- "Santa Fe"	//de la zona centro.
     provincias[2, 1] <- "1"
     provincias[3, 0] <- "Mendoza"
     provincias[3, 1] <- "3"
@@ -56,19 +56,19 @@ Algoritmo ReservaVuelos
     provincias[8, 0] <- "Corrientes"
     provincias[8, 1] <- "2"
     provincias[9, 0] <- "Santiago del Estero"
-    provincias[9, 1] <- "5"
+    provincias[9, 1] <- "4"
     provincias[10, 0] <- "San Juan"
     provincias[10, 1] <- "3"
     provincias[11, 0] <- "Jujuy"
     provincias[11, 1] <- "4"
     provincias[12, 0] <- "Río Negro"
-    provincias[12, 1] <- "3"
+    provincias[12, 1] <- "6"
     provincias[13, 0] <- "Neuquén"
-    provincias[13, 1] <- "3"
+    provincias[13, 1] <- "6"
     provincias[14, 0] <- "Formosa"
     provincias[14, 1] <- "5"
     provincias[15, 0] <- "Chubut"
-    provincias[15, 1] <- "3"
+    provincias[15, 1] <- "6"
     provincias[16, 0] <- "Misiones"
     provincias[16, 1] <- "2"
     provincias[17, 0] <- "San Luis"
@@ -80,7 +80,7 @@ Algoritmo ReservaVuelos
     provincias[20, 0] <- "La Pampa"
     provincias[20, 1] <- "1"
     provincias[21, 0] <- "Santa Cruz"
-    provincias[21, 1] <- "4"
+    provincias[21, 1] <- "6"
     provincias[22, 0] <- "Tierra del Fuego"
     provincias[22, 1] <- "6"
     provincias[23, 0] <- "CABA"
@@ -603,4 +603,8 @@ FinSubProceso
 
 //-------------------------------------------------
 
+// al array horariosVuelos podríamos directamente agregarle una fecha simbólica(sin cambiar la dimension!), si de todas formas es una cadena y no afecta en nada,sería solamente algo estético
+// ya que queda raro que en ningún momento del programa se muestre una fecha
 
+
+//----------------------------------------------------

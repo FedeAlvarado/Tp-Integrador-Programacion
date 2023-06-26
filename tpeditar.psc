@@ -1,7 +1,7 @@
 Algoritmo ReservaVuelos
     definir usuarios, provincias, reservasCompra, horariosVuelo, arrayEquipajesGuardados, opcionesEquipaje, elementoABuscar,pausa como cadena
     definir origen, destino, horario, codigosDeReserva,cantidadUsuarios, opcionValija, opcionCantidad, codigoReservaAsignado, encontrarIndiceDeReserva, indiceEquipajes, numeroDeUsuario como entero
-    definir retorno, registro, login Como Logico
+    definir retorno, registro, login, validaAdminUser como Logico
 	definir costoTotal, tarifaBase, costoPasaje, costoFinalEquipaje como real
 	
 	dimension usuarios[100,6] // Almacenamiento de los datos de usuarios registrados
@@ -154,7 +154,8 @@ Algoritmo ReservaVuelos
 				
 				
 			5:
-				adminUser(usuarios, cantidadUsuarios,6)
+				adminUser(usuarios, cantidadUsuarios,6)					
+				
 				// ////////////////////////////////////////////////////////////////
 				
 				// ordenamientos y busquedas para el admin user
@@ -506,43 +507,70 @@ subproceso adminUser(usuarios, cantidadUsuarios Por referencia,6)
 		leer pass
 		contador<- contador +1
 		
-		Si contador == 3 Entonces
-			Escribir "Ha ingresado los datos de forma incorrecta 3 veces, vuelva a intentarlo más tarde..."
-			Leer pausa
-		Fin Si
-	Mientras Que user<> "admin" y pass<> "admin" y contador<3
+	Mientras Que (user<> "admin" o pass<> "admin") y contador<3
 	
-	mostrar "Ingrese una opción"
-	mostrar "1 - Ver usuarios registrados en el sistema"
-	mostrar "2 - Buscar usuario registrado por apellido"//         2 - buscar un usuario registrado específico(por apellido)
-	mostrar "3 - Visualizar usuarios Orden Alfabético(Apellido)"
-	mostrar "4 - Visualizar Ventas"
-	mostrar "5 - Ventas ordenadas por monto"
-	mostrar "6 - Buscar Ventas según Origen/destino"
-	mostrar "7 - salir"
-	Repetir
-		leer opcionMenu
-	Mientras Que opcionMenu<1 o opcionMenu>7
+	Si contador == 3 Entonces
+		Escribir "Ha ingresado los datos de forma incorrecta 3 veces, vuelva a intentarlo más tarde..."
+		Leer pausa
+		
+	SiNo
+		
+		mostrar "Ingrese una opción"
+		mostrar "1 - Ver usuarios registrados en el sistema"
+		mostrar "2 - Buscar usuario registrado por apellido"//         2 - buscar un usuario registrado específico(por apellido)
+		mostrar "3 - Visualizar usuarios Orden Alfabético(Apellido)"
+		mostrar "4 - Visualizar Ventas"
+		mostrar "5 - Ventas ordenadas por monto"
+		mostrar "6 - Buscar Ventas según Origen/destino"
+		mostrar "7 - salir"
+		Repetir
+			leer opcionMenu
+		Mientras Que opcionMenu<1 o opcionMenu>7
+		
+		Repetir
+			Segun opcionMenu Hacer
+				1:
+					mostrarArray(usuarios,cantidadUsuarios,6)
+					
+					
+					
+				2:
+					
+					buscarUsuarioRegistrado(usuarios,cantidadUsuarios,6)
+					
+					
+				3:
+					ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
+					mostrarArray(usuarios,cantidadUsuarios,6)
+					ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
+					//continuar
+				4:
+					
+					
+					
+				5:
+					
+					
+					
+				6:	
+					
+					
+					
+				7:
+					Escribir "Saliendo de modo administrador."
+					Escribir "Para operar nuevamente vuelva a loguearse."
+					Leer pausa
+					
+			Fin Segun	
+		Mientras Que opcionMenu<>7
+		
+	Fin Si
 	
-	Repetir
-		Segun opcionMenu Hacer
-			1:
-				mostrarArray(usuarios,cantidadUsuarios,6)
-				
-			2:
-				
-				
-			3:
-				ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
-				mostrarArray(usuarios,cantidadUsuarios,6)
-				ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
-				//continuar
-				
-				
-		Fin Segun	
-	Mientras Que opcionMenu<>7
+	
 	
 FinSubProceso
+
+
 
 SubProceso mostrarUsuarios(usuarios,n,m) // ya hay un subproceso de mostrar array!!!!!
 	definir i,j como entero
@@ -552,6 +580,10 @@ SubProceso mostrarUsuarios(usuarios,n,m) // ya hay un subproceso de mostrar arra
 		Fin Para
 		Escribir ""
 	Fin Para
+FinSubProceso
+
+SubProceso buscarUsuarioRegistrado(usuarios,n,m)
+	
 FinSubProceso
 
 SubProceso ordernarUsuariosDESC(array,n,m,columnaAOrdenar) // para ordenar usuarios Alfabéticamente
@@ -606,9 +638,11 @@ FinSubProceso
 
 // puntos 2,4,5,6 del USER ADMIN (distintas busquedas y ordenamientos, varios subprocesos se pueden reutilizar)
 
-//hay que ver como se sale del switch, ahjora siempre está en bucle, hay que pedirle al usuario opcionMenu al final de cada case
+//hay que ver como se sale del switch, ahora siempre está en bucle, hay que pedirle al usuario opcionMenu
+//al final de cada case
 
-//en el login del user admin tiene 3 intentos máximo pero hay que agregarle mensaje informativo o de error, ahora no muestra nada
+//en el login del user admin tiene 3 intentos máximo pero hay que agregarle mensaje informativo o de error, 
+//ahora no muestra nada
 
 //-----------------------------------------
 

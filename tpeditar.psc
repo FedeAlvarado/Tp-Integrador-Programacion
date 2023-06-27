@@ -490,7 +490,7 @@ FinSubProceso
 
 subproceso adminUser(usuarios, cantidadUsuarios Por referencia,6)
 	definir opcionMenu,contador Como Entero
-	definir user, pass como cadena
+	definir user, pass, verMenuNuevamente como cadena
 	contador<-0
 	
 	//-----------------------------//
@@ -499,74 +499,83 @@ subproceso adminUser(usuarios, cantidadUsuarios Por referencia,6)
 	//password: admin             //
 	//----------------------------//
 	
-	Repetir
-		
-		mostrar "Ingrese su nombre de usuario"
-		leer user
-		mostrar "Ingrese su password"
-		leer pass
-		contador<- contador +1
-		
-	Mientras Que (user<> "admin" o pass<> "admin") y contador<3
-	
-	Si contador == 3 Entonces
-		Escribir "Ha ingresado los datos de forma incorrecta 3 veces, vuelva a intentarlo más tarde..."
-		Leer pausa
-		
-	SiNo
-		
-		mostrar "Ingrese una opción"
-		mostrar "1 - Ver usuarios registrados en el sistema"
-		mostrar "2 - Buscar usuario registrado por apellido"//         2 - buscar un usuario registrado específico(por apellido)
-		mostrar "3 - Visualizar usuarios Orden Alfabético(Apellido)"
-		mostrar "4 - Visualizar Ventas"
-		mostrar "5 - Ventas ordenadas por monto"
-		mostrar "6 - Buscar Ventas según Origen/destino"
-		mostrar "7 - salir"
-		Repetir
-			leer opcionMenu
-		Mientras Que opcionMenu<1 o opcionMenu>7
 		
 		Repetir
-			Segun opcionMenu Hacer
-				1:
-					mostrarArray(usuarios,cantidadUsuarios,6)
-					
-					
-					
-				2:
-					
-					buscarUsuarioRegistrado(usuarios,cantidadUsuarios,6)
-					
-					
-				3:
-					ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
-					mostrarArray(usuarios,cantidadUsuarios,6)
-					ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
-					//continuar
-				4:
-					
-					
-					
-				5:
-					
-					
-					
-				6:	
-					
-					
-					
-				7:
-					Escribir "Saliendo de modo administrador."
-					Escribir "Para operar nuevamente vuelva a loguearse."
+			
+			mostrar "Ingrese su nombre de usuario"
+			leer user
+			mostrar "Ingrese su password"
+			leer pass
+			contador<- contador +1
+			
+		Mientras Que (user<> "admin" o pass<> "admin") y contador<3
+		
+		Repetir
+			
+				Si contador == 3 Entonces
+					Escribir "Ha ingresado los datos de forma incorrecta 3 veces, vuelva a intentarlo más tarde..."
 					Leer pausa
-					
-			Fin Segun	
-		Mientras Que opcionMenu<>7
-		
-	Fin Si
-	
-	
+				
+				SiNo
+				
+				//Repetir
+					mostrar "Ingrese una opción"
+					mostrar "1 - Ver usuarios registrados en el sistema"
+					mostrar "2 - Buscar usuario registrado por apellido"//  primero ordenar arreglo (usar subproceso de punto 3)y despues buscar un usuario registrado específico (por apellido)
+					mostrar "3 - Visualizar usuarios Orden Alfabético(Apellido)" //ordenar arreglo
+					mostrar "4 - Visualizar Ventas"  //mostrar arreglo
+					mostrar "5 - Ventas ordenadas por monto" // busqueda secuencial
+					mostrar "6 - Buscar Ventas según Origen/destino" // primero ordenar arreglo y despues busqueda binaria
+					mostrar "7 - Salir"
+				
+					leer opcionMenu
+				
+				//Mientras Que opcionMenu>7 o opcionMenu<1
+				
+					//Repetir
+						Segun opcionMenu Hacer
+							1:
+							mostrarArray(usuarios,cantidadUsuarios,6)
+							Leer pausa
+							
+							
+							2:
+							
+							buscarUsuarioRegistrado(usuarios, cantidadUsuarios, 6, apellido)
+							Leer pausa
+							
+							
+							3:
+							ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
+							mostrarArray(usuarios,cantidadUsuarios,6)
+							ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
+							Leer pausa
+							
+							//continuar
+							4:
+							
+							
+							
+							5:
+							
+							
+							
+							6:	
+							
+							
+							
+							7:
+							Escribir "Saliendo de modo administrador."
+							Escribir "Para operar nuevamente vuelva a loguearse."
+							Leer pausa
+							
+						Fin Segun	
+					//Mientras Que opcionMenu>7 O opcionMenu<1
+				
+				Fin Si
+				
+			
+		Mientras Que opcionMenu <> 7 //(verMenuNuevamente == "SI" o verMenuNuevamente <> "NO") y 
 	
 FinSubProceso
 
@@ -582,8 +591,32 @@ SubProceso mostrarUsuarios(usuarios,n,m) // ya hay un subproceso de mostrar arra
 	Fin Para
 FinSubProceso
 
-SubProceso buscarUsuarioRegistrado(usuarios,n,m)
+
+//busca usuario registrado por apellido
+SubProceso buscarUsuarioRegistrado(arreglo, n, m, buscar)
+	Definir i, centro, inferior, superior Como Entero
+	Definir encontrado Como Logico
+	inferior=0
+	superior=n-1
+	encontrado=Falso
 	
+	Repetir
+		centro=trunc((inferior+superior)/2)
+		si arreglo[centro]=buscar
+			Mostrar "El elemento fue encontrado en la posición: ", centro+1
+			encontrado=Verdadero
+			
+		SiNo
+			si arreglo[centro]<buscar
+				inferior=centro+1
+			SiNo
+				superior=centro-1
+			FinSi
+		FinSi
+		si inferior>superior
+			Mostrar "No se ha encontrado el apellido ingresado"
+		FinSi
+	Mientras Que !encontrado y inferior<=superior
 FinSubProceso
 
 SubProceso ordernarUsuariosDESC(array,n,m,columnaAOrdenar) // para ordenar usuarios Alfabéticamente

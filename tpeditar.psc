@@ -521,7 +521,7 @@ subproceso adminUser(usuarios, cantidadUsuarios Por referencia,6)
 				//Repetir
 					mostrar "Ingrese una opción"
 					mostrar "1 - Ver usuarios registrados en el sistema"
-					mostrar "2 - Buscar usuario registrado por apellido"//  primero ordenar arreglo (usar subproceso de punto 3)y despues buscar un usuario registrado específico (por apellido)
+					mostrar "2 - Buscar usuario registrado por apellido"
 					mostrar "3 - Visualizar usuarios Orden Alfabético(Apellido)" //ordenar arreglo
 					mostrar "4 - Visualizar Ventas"  //mostrar arreglo
 					mostrar "5 - Ventas ordenadas por monto" // busqueda secuencial
@@ -535,21 +535,25 @@ subproceso adminUser(usuarios, cantidadUsuarios Por referencia,6)
 					//Repetir
 						Segun opcionMenu Hacer
 							1:
-							mostrarArray(usuarios,cantidadUsuarios,6)
-							Leer pausa
+								Escribir "    NOMBRE    //    APELLIDO    //    DNI    //    EDAD    "
+								
+								mostrarArray(usuarios,cantidadUsuarios,4)
+								Leer pausa
 							
 							
 							2:
-							
-							buscarUsuarioRegistrado(usuarios, cantidadUsuarios, 6, apellido)
-							Leer pausa
+								Escribir Sin Saltar "Ingrese el apellido que desea buscar: "
+								Leer apellido
+								
+								buscarUsuarioRegistrado(usuarios, apellido)
+								Leer pausa
 							
 							
 							3:
-							ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
-							mostrarArray(usuarios,cantidadUsuarios,6)
-							ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
-							Leer pausa
+								ordernarUsuariosDESC(usuarios,cantidadUsuarios,6,1)
+								mostrarArray(usuarios,cantidadUsuarios,6)
+								ordernarArregloASC(usuarios,cantidadUsuarios,6,5)//Regresa a su orden original, ordenandolo por nro de usuario registrado
+								Leer pausa
 							
 							//continuar
 							4:
@@ -593,30 +597,33 @@ FinSubProceso
 
 
 //busca usuario registrado por apellido
-SubProceso buscarUsuarioRegistrado(arreglo, n, m, buscar)
-	Definir i, centro, inferior, superior Como Entero
+SubProceso buscarUsuarioRegistrado(arreglo, buscar)
+	Definir fila, columna Como Entero 
 	Definir encontrado Como Logico
-	inferior=0
-	superior=n-1
-	encontrado=Falso
+	encontrado<-Falso
 	
-	Repetir
-		centro=trunc((inferior+superior)/2)
-		si arreglo[centro]=buscar
-			Mostrar "El elemento fue encontrado en la posición: ", centro+1
-			encontrado=Verdadero
-			
-		SiNo
-			si arreglo[centro]<buscar
-				inferior=centro+1
-			SiNo
-				superior=centro-1
+	Para i<-0 hasta 99 Hacer
+		Para j<-0 hasta 5 Hacer
+			si arreglo[i,j]==buscar Entonces
+				fila<-i
+				columna<-j
+				encontrado<-Verdadero
+				
 			FinSi
-		FinSi
-		si inferior>superior
-			Mostrar "No se ha encontrado el apellido ingresado"
-		FinSi
-	Mientras Que !encontrado y inferior<=superior
+		FinPara
+	FinPara
+	
+	si encontrado == Verdadero Entonces
+		Escribir "¡Se ha encontrado el apellido buscado!"
+		Escribir "Los datos del usuario son: "
+		Escribir "    NOMBRE    //    APELLIDO    //    DNI    //    EDAD    "
+		Para j<-0  Hasta 3 Hacer
+			Escribir Sin Saltar arreglo[fila,j] " "
+		FinPara
+		Escribir ""
+	SiNo
+		escribir "El apellido buscado no se ha encontrado"
+	FinSi
 FinSubProceso
 
 SubProceso ordernarUsuariosDESC(array,n,m,columnaAOrdenar) // para ordenar usuarios Alfabéticamente
